@@ -36,24 +36,11 @@ def count_sigmoid(m, x, y):
     total_ops = 19 * nelements
     m.total_ops += torch.Tensor([int(total_ops)])
 
-
-def count_swish(m, x, y):
-    """
-    swish = x*sigmoid(x). So the total ops is 20*num_elements. See definition of count_sigmoid.
-    """
-    x = x[0]
-
-    nelements = x.numel()
-
-    total_ops = 20 * nelements
-    m.total_ops += torch.Tensor([int(total_ops)])
-
 if __name__ == '__main__':
     custom_ops = {
             Conv2dDynamicSamePadding: count_convNd,
             Conv2dStaticSamePadding: count_convNd,
             MemoryEfficientSwish: zero_ops,
-            # MemoryEfficientSwish: count_swish,
         }
 
     encoder = networks.EfficientEncoder()
