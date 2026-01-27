@@ -48,30 +48,6 @@ def count_swish(m, x, y):
     total_ops = 20 * nelements
     m.total_ops += torch.Tensor([int(total_ops)])
 
-class Test_Enconder(nn.Module):
-    def __init__(self):
-        super(Test_Enconder, self).__init__()
-        num_enc = [16, 24, 40, 112, 320, 1280]
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=num_enc[0], kernel_size=3, stride=2, padding=1)
-        self.conv2 = nn.Conv2d(in_channels=num_enc[0], out_channels=num_enc[1], kernel_size=3, stride=2, padding=1)
-        self.conv3 = nn.Conv2d(in_channels=num_enc[1], out_channels=num_enc[2], kernel_size=3, stride=2, padding=1)
-        self.conv4 = nn.Conv2d(in_channels=num_enc[2], out_channels=num_enc[3], kernel_size=3, stride=2, padding=1)
-        self.conv5 = nn.Conv2d(in_channels=num_enc[3], out_channels=num_enc[4], kernel_size=3, stride=2, padding=1)
-        self.conv6 = nn.Conv2d(in_channels=num_enc[4], out_channels=num_enc[5], kernel_size=1, stride=1)
-    def forward(self, x):
-        feats = []
-        feats.append(self.conv1(x))
-        feats.append(self.conv2(feats[-1]))
-        feats.append(self.conv3(feats[-1]))
-        feats.append(self.conv4(feats[-1]))
-        feats.append(self.conv5(feats[-1]))
-        feats.append(self.conv6(feats[-1]))
-
-        return feats
-
-
-
-
 if __name__ == '__main__':
     custom_ops = {
             Conv2dDynamicSamePadding: count_convNd,
@@ -98,13 +74,5 @@ if __name__ == '__main__':
     flops, params = get_model_complexity_info(model, (3, 192, 640), as_strings=True, print_per_layer_stat=False)
     print('Flops:  ' + flops)
     print('Params: ' + params)
-
-    # encoder_test = Test_Enconder()
-    # model_test = model_name(encoder_test, depth_decoder)
-    # stat(model_test, (3, 192, 640))
-
     print('down')
-    # text_path = "test.txt"
-    # with open(text_path, "a") as f:
-    #     f.write(('{:.3f}MB, {:.2f}G FLOPS').format(params * 1e-6, macs * 1e-9))
-    #     f.write("\r\n")
+
